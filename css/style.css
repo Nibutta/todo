@@ -107,15 +107,15 @@ html, body {
 }
 #items_wrap div .removeItem { /* remove button [x] */
     display: none;
-    width: 15px;
-    height: 15px;
-    font-size: 15px;
-    color: #040404;
     background-color: inherit;
-    margin: 0 auto;
+    width: 25px;
+    height: 25px;
+    background-image: url("cross_icon.png");
+    padding: 0;
+    margin: 0;
 }
 #items_wrap div .removeItem:after {
-    content: '×';
+    background-image: url("cross_icon.png");
 }
 #items_wrap div:hover .removeItem {
     display: block;
