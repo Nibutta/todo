@@ -55,7 +55,7 @@ input {
 }
 #addButton:hover {
     cursor: pointer;
-    opacity: .5;
+    opacity: .7;
 }
 .tasks_block {
     width: 100%;
