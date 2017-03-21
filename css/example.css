@@ -1,0 +1,93 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.4em;
+    background: #f5f5f5;
+    color: #4d4d4d;
+    margin: 0 auto;
+}
+input[type="checkbox"] {
+    width: auto;
+}
+
+#newItem{
+    background: yellow;
+    font-size: 24px;
+    margin: 130px 0 40px 0;
+    position: relative;
+}
+
+#markAll {
+    position: relative;
+    color: yellow;
+    top: 0px;
+    left: 0px;
+    width: 40px;
+    height: 20px;
+}
+
+#items_wrap {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#items_wrap div {
+    position: relative;
+    font-size: 24px;
+    border-bottom: 1px solid lightgrey;
+}
+
+#items_wrap div .checkMark {
+    text-align: center;
+    width: 40px;
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    appearance: none;
+}
+
+#items_wrap div span {
+    white-space: pre;
+    padding: 15px 60px 15px 15px;
+    color: black;
+    margin-left: 45px;
+    display: block;
+    line-height: 1.2;
+}
+
+#items_wrap div .removeItem {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    bottom: 0;
+    width: 40px;
+    height: 40px;
+    margin: auto 0;
+    font-size: 30px;
+    color: #cc9a9a;
+    margin-bottom: 11px;
+}
+
+#items_wrap div .removeItem:after {
+    content: '×';
+}
+
+#items_wrap div:hover .removeItem {
+    display: block;
+}
+
+.editItem {
+
+    padding: 15px 60px 15px 15px;
+    margin-left: 45px;
+    font-size: 24px;
+}

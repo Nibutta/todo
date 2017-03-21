@@ -11,14 +11,14 @@ html, body {
     background-color: #3f2e5b;
     font-family: 'Open Sans', sans-serif;
 }
-/* body */
+/* body forming blocks */
 .body_wrap {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     width: 50%;
     min-width: 450px;
-    padding: 10px 0%;
+    padding: 10px 0;
     margin: 10px auto;
     background-color: #fafafa;
     color: #040404;
@@ -32,7 +32,7 @@ html, body {
     padding-bottom: 10px;
     color: #3f2e5b;
 }
-.adding_block {
+.menu_block {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -41,64 +41,98 @@ html, body {
     background: linear-gradient(to right, #fafafa, #e0e0e0, #fafafa);
     color: #040404;
 }
-input {
-    padding: 5px 7px;
-    width: 300px;
+.menu_text {
+    text-align: left;
+    font-size: 14px;
+    font-weight: 300;
 }
-#addButton {
+/* content / js styles */
+#addButton, #clearButton { /* divs as buttons */
     display: inline-block;
     background-color: #3f2e5b;
     color:#fafafa;
     text-align:center;
     margin-left:10px;
-    padding: 2px 10px;
+    padding: 3px 10px;
 }
-#addButton:hover {
+#addButton {
+    width: 70px;
+}
+#addButton:hover, #clearButton:hover {
     cursor: pointer;
     opacity: .7;
 }
-.items_text {
+
+#items_wrap { /* wrap block for the items */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    min-height: 225px;
+    padding: 5px 0;
     text-align: left;
     font-size: 16px;
     font-weight: 300;
 }
-#items_wrap {
+
+#items_wrap div { /* each div ccontains checkbox, item and remove button */
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    height: 500px;
-    padding: 5px 5%;
+    height:50px;
+    background-color: #f5f5f5;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding: 3px 5%;
 }
-#item_block {
+#items_wrap div .item_inner_wrap { /* service div */
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    width: 100%;
-    background-color: #fafafa;
-    margin-top: 2px;
-    margin-bottom: 2px;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
 }
-.markItem {
-    text-align: center;
-    width: 40px;
-    height: auto;
-    top: 0;
-    bottom: 0;
+#items_wrap div:hover {
+    background-color: #f1f1f1;
+}
+#items_wrap div .checkMark { /* checkbox inside the item div */
+    width: 20px;
+    height: 15px;
+}
+#items_wrap div span {  /* item text container */
+    padding-left: 15px;
+}
+#items_wrap div .removeItem { /* remove button [x] */
+    display: none;
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+    color: #040404;
+    background-color: inherit;
     margin: 0 auto;
+}
+#items_wrap div .removeItem:after {
+    content: '×';
+}
+#items_wrap div:hover .removeItem {
+    display: block;
+}
+.editItem {
+    padding: 5px 7px;
+    width: 250px;
+}
+input {
+    padding: 5px 7px;
+    width: 300px;
 }
 input[type="checkbox"] {
     width: auto;
 }
 #markAll {
-
-}
-.editItem {
-
-}
-.bRemoveItem {
-    content: "x";
-}
-#clearComp {
-
+    width: 20px;
+    height: 15px;
+    float: left;
 }

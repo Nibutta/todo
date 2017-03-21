@@ -12,22 +12,22 @@
 
     <div class="title">To Do List</div>
 
-    <!--- block with add form -->
-    <div class="adding_block items_text">
-        <form name="addItem">
-            <input type="text" id="newItem" placeholder="What to do?"/>
-        </form>
+    <!--- top block with add form -->
+    <div class="menu_block menu_text">
+        <input type="text" id="newItem" placeholder="What to do?"/>
         <div id="addButton">Add</div>
     </div>
 
     <!--- block with items -->
-    <div id="items_wrap" class="items_text">
-
-
-
+    <div id="items_wrap">
 
     </div>
-    <input type="checkbox" id="markAll"/>
+
+    <!--- bottom block with controls -->
+    <div class="menu_block menu_text">
+        <input type="checkbox" id="markAll"/><div style="align-self: center;">Complete all</div>
+        <div id="clearButton">Clear completed</div>
+    </div>
 </div>
 </body>
 </html>
