@@ -1,5 +1,5 @@
 /**
- * Created by Peter Dee on 21.03.17.
+ * Created by Pete Dee on 21.03.17.
  */
 function addListItem() {
     var content = $('#newItem').val();
@@ -52,7 +52,7 @@ $(document).ready(function() {
         }
     });
     $(document).on('click', '.checkMark', completedItems);
-    $('#clearComp').click(removeCompleted);
+    $('#clearButton').click(removeCompleted);
     $('#items_wrap').on('dblclick', 'span', function ()
         {
             var thisData = this.innerHTML,

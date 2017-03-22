@@ -1,0 +1,38 @@
+h1 {
+    font-size: 1.5em;
+}
+ul {
+    padding: 10px;
+}
+.done {
+    text-decoration: line-through;
+    opacity: .6;
+}
+.undone {
+    text-decoration: none;
+}
+#inner {
+    color: #004455;
+    padding: 1px 3px;
+}
+#checkBlock {
+    height: 15px;
+    width: 15px;
+    border-radius: 8px;
+    background: red;
+}
+#checkBlockDone {
+    height: 15px;
+    width: 15px;
+    border-radius: 8px;
+    background: green;
+}
+li {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: slex-start;
+}
+.editItem {
+    background-color: #afafaf;
+}
