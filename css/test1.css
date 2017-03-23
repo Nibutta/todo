@@ -1,38 +1,27 @@
-h1 {
-    font-size: 1.5em;
+#addButton, #clearButton {
+    width: 120px;
+    text-align: center;
+    padding: 2px 5px;
+    background-color: lime;
 }
-ul {
-    padding: 10px;
+#addButton:hover, #clearButton:hover {
+    background-color: #abffab;
+}
+.item {
+    display: flex;
+    flex-direction: row;
+    justify-items: flex-start;
+}
+#checkBox {
+    height: 15px;
+    width: 15px;
+    background-color: #ffbbbb;
+    align-self: center;
+}
+#content {
+    align-self: center;
+    padding-left: 5px;
 }
 .done {
     text-decoration: line-through;
-    opacity: .6;
-}
-.undone {
-    text-decoration: none;
-}
-#inner {
-    color: #004455;
-    padding: 1px 3px;
-}
-#checkBlock {
-    height: 15px;
-    width: 15px;
-    border-radius: 8px;
-    background: red;
-}
-#checkBlockDone {
-    height: 15px;
-    width: 15px;
-    border-radius: 8px;
-    background: green;
-}
-li {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: slex-start;
-}
-.editItem {
-    background-color: #afafaf;
 }

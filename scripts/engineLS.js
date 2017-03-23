@@ -8,26 +8,26 @@ $(document).ready(function () {
 
     // PARSING localStorage
     for (i = 0; i < localStorage.length; i++) {
-        var itemID = "task-" + i;
+        var itemID = "item-" + i;
 
         //if ()                      // check item status
 
-        $('#items_wrap').append("<div class='item' id='" + itemID + "'><div id='checkBlock'></div>"
-            + localStorage.getItem(itemID) + "</div>");
+        $('#items_wrap').append("<div class='item'><div id='checkBlock'></div><div id='" + itemID + "'>"
+            + localStorage.getItem(itemID) + "</div><div class='killItem'></div></div>");
     }
 
     // ADDING ITEM
     var addItem = function() {
         if ($('#newItem').val() !== "") {
 
-            var itemID = "task-" + i;                   // item ID
+            var itemID = "item-" + i;                   // item ID
             var itemValue = $('#newItem').val();        // item value
             var itemState = 1;                          // item state:  pending
 
             localStorage.setItem(itemID, itemValue, itemState);
 
-            $('#items_wrap').append("<div class='item' id='" + itemID + "'><div id='checkBlock'></div>"
-                + itemValue + "</div>");
+            $('#items_wrap').append("<div class='item'><div id='checkBlock'></div><div id='" + itemID + "'>"
+                + itemValue + "</div><div class='killItem'></div></div>");
 
             $('#newItem').val("");
             i++;
@@ -44,19 +44,19 @@ $(document).ready(function () {
     });
 
     // CHANGE ITEM STATUS
-    $('#checkBlock').on('click', function() {
-        if ($(this).parent('div').hasClass('done'))
+    $('#checkBlock').click(function() {
+        if ($(this).parent('.item').hasClass('done'))
         {
-            $(this).parent('div').removeClass('done');
-            $(this).css('backgroundColor', 'red')
+            $(this).parent('.item').removeClass('done');
+            $(this).css('backgroundColor', '#ff939d');
             itemState = 1;
             tDone--;
             tPending++;
         }
         else
         {
-            $(this).parent('div').addClass('done');
-            $(this).css('backgroundColor', 'green');
+            $(this).parent('.item').addClass('done');
+            $(this).css('backgroundColor', '#5def9d');
             itemState = 2;
             tDone++;
             tPending--;
@@ -64,7 +64,7 @@ $(document).ready(function () {
     });
 
     // EDIT ITEM
-    $('.item').on('dblclick', function ()
+    $("#itemID").on('dblclick', function ()
     {
         var thisData = this.innerHTML,
             $el = $('<input type="text" class="editItem"/>');
@@ -75,7 +75,7 @@ $(document).ready(function () {
     });
 
     // CLOSE EDIT FIELD ON ENTER
-    $('.editItem').on('keyup', (function(e)
+    $(".editItem").keydown(function(e)
     {
         if (e.keyCode === 13)
         {
@@ -84,25 +84,24 @@ $(document).ready(function () {
         if (e.keyCode == 27) {
             $('.editItem').remove();
         }
-    }));
+    });
 
 
-    // CLEAR BUTTON (?)
+    // CLEAR BUTTON (?) CLEARS ALL LOCALSTORAGE DATA
         $('#clearButton').click(function () {
             localStorage.clear();
         });
 
-
-
-    /*$('#items_wrap').on("click", "div", function (event) {
-        self = $(this);
-        itemID = self.attr('id');
+    // KILL ITEM
+    $(".killItem").click(function (event) {
+        item = $(this).parent('.item');
+        itemID = item.attr('id');
         localStorage.removeItem(itemID);
-        self.slideUp('slow', function () {
-            self.remove();
+        item.slideUp('slow', function () {
+            item.remove();
         });
 
-    });*/
+    });
 
 
 });
