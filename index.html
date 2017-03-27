@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>To Do List</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="scripts/jquery-3-1-1.js"></script>
     <script src="scripts/engine.js"></script>
 </head>
 <body>
@@ -25,21 +25,21 @@
 
 
 
-
-
-
-
     </div>
 
     <!--- bottom block with controls -->
     <div class="menu_block menu_text">
 
-        <div id="markAll"></div><div style="align-self: center;">Complete all</div>
+        <div id="bottom_showAll" class="bottom_radio checked"></div><div style="align-self: center;">Show all</div>
+        <div id="bottom_showPending" class="bottom_radio"></div><div style="align-self: center;">Show pending</div>
+        <div id="bottom_showDone" class="bottom_radio"></div><div style="align-self: center;">Show completed</div>
 
-        <div id="clearButton">Clear completed</div>
+        <div id="clearButton">Clear all</div>
 
         <div id="pending" class="stats"></div>
         <div id="done" class="stats"></div>
+        <div id="currentID" class="stats"></div>
+        <div id="selID" class="stats"></div>
 
     </div>
     <div class="copyright">by Peter Dyumin, 2017</div>

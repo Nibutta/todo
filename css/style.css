@@ -44,6 +44,7 @@ html, body {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    flex-wrap: wrap;
     width: 100%;
     padding: 5px 5%;
     background: linear-gradient(to right, #fafafa, #e0e0e0, #fafafa);
@@ -58,11 +59,18 @@ html, body {
     align-self: center;
     padding-left: 5px;
 }
-
-
-
-
-
+.bottom_radio {
+    height: 15px;
+    width: 15px;
+    margin: 0 5px;
+    align-self: center;
+    flex-shrink: 0;
+    background-color: inherit;
+    border: 1px solid #3f2e5b;
+}
+.bottom_radio:hover {
+    opacity: .7;
+}
 
 
 
@@ -73,7 +81,7 @@ html, body {
     background-color: #3f2e5b;
     color:#fafafa;
     text-align:center;
-    margin-left: 10px;
+    margin: 0 10px;
     padding: 3px 10px;
 }
 #addButton {
@@ -113,28 +121,38 @@ html, body {
     background-color: #f1f1f1;
 }
 
-#items_wrap .item #checkBox {
+#items_wrap .item .checkBox {
     height: 15px;
     width: 15px;
-    background: #ff9999;
+    background-color: inherit;
     margin-right: 5px;
+    border: 1px solid #3f2e5b;
+}
+#items_wrap .item .checkBox:hover {
+    opacity: .7;
+}
+.checked {
+    background-image: url("check_x15.png");
 }
 .done {
     text-decoration: line-through;
 }
 
-#items_wrap .item #killItem { /* remove button [x] */
+#items_wrap .item .killItem { /* remove button [x] */
     background-color: inherit;
-    width: 25px;
-    height: 25px;
-    background-image: url("cross_icon.png");
+    width: 15px;
+    height: 15px;
+    background-image: url("cross_x15.png");
     padding: 0;
     margin-left: 10px;
+}
+#items_wrap .item .killItem:hover {
+    opacity: .7;
 }
 
 .editItem {
     padding: 5px 7px;
-    width: 250px;
+    width: 300px;
 }
 
 input {
