@@ -14,6 +14,12 @@ $(document).ready(
         var pend = 0; // pending tasks
         var show = 0; // what to show -> show status: 0 = all, 1 = pending, 2 = done
 
+        //*****PAGINATION*********
+        var iNumber = 5;    // number of items on page
+        var firstPage = 1;  //
+        var lastPage = 1;   //
+        //************************
+
         var sid = 0; // selected id
         var sval = ""; // selected value
         //*****************************************************************************************
@@ -24,8 +30,8 @@ $(document).ready(
         stats = function () {
             document.getElementById("pending").innerHTML = 'Pending: ' + pend;
             document.getElementById("done").innerHTML = 'Done: ' + done;
-            document.getElementById("currentID").innerHTML = 'All: ' + itemsArray.length;
-            document.getElementById("selID").innerHTML = 'Selected: ' + sid + ' ' + sval;
+            document.getElementById("currentID").innerHTML = '| Next ID: ' + itemsArray.length;
+            document.getElementById("selID").innerHTML = '| Selected ID: ' + sid + '; value: ' + sval;
         };
 
 
@@ -117,10 +123,6 @@ $(document).ready(
                     }
                 }
             }
-            /*if (e.keyCode === 27)  // if ESCAPE is pressed
-            {
-                $('.editItem').remove();
-            }*/
         };
 
 
@@ -142,7 +144,8 @@ $(document).ready(
                     {
                         done--;
                     }
-                    itemsArray.splice(i, 1);
+                    //itemsArray.splice(i, 1);                      // deleting item OR...
+                    itemsArray[i].istate = "del";                   // ...change state to the "deleted"
                     $(this).parent('div').remove();
                 }
             }
@@ -172,23 +175,24 @@ $(document).ready(
 
             for (var q = 0; q < itemsArray.length; q++)
             {
-                if (itemsArray[q].istate === "p")
+                if (itemsArray[q].istate !== "del")
                 {
-                    $('#items_wrap').append("<div class='item' id='" + itemsArray[q].idn + "'><div class='checkBox' id='checkBox-"
-                        + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
-                        + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
-                        + itemsArray[q].idn + "'></div></div>");
-                }
-                else
-                {
-                    $('#items_wrap').append("<div class='item done' id='" + itemsArray[q].idn + "'><div class='checkBox checked' id='checkBox-"
-                        + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
-                        + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
-                        + itemsArray[q].idn + "'></div></div>");
+                    if (itemsArray[q].istate === "p") {
+                        $('#items_wrap').append("<div class='item' id='" + itemsArray[q].idn + "'><div class='checkBox' id='checkBox-"
+                            + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
+                            + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
+                            + itemsArray[q].idn + "'></div></div>");
+                    }
+                    else {
+                        $('#items_wrap').append("<div class='item done' id='" + itemsArray[q].idn + "'><div class='checkBox checked' id='checkBox-"
+                            + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
+                            + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
+                            + itemsArray[q].idn + "'></div></div>");
+                    }
                 }
             }
             show = 0;
-            $(this).addClass('checked');
+            $('#bottom_showAll').addClass('checked');
             $('#bottom_showPending').removeClass('checked');
             $('#bottom_showDone').removeClass('checked');
         };
@@ -200,16 +204,19 @@ $(document).ready(
             $('.item').remove();
             for (var q = 0; q < itemsArray.length; q++)
             {
-                if (itemsArray[q].istate === "p")
+                if (itemsArray[q].istate !== "del")
                 {
-                    $('#items_wrap').append("<div class='item' id='" + itemsArray[q].idn + "'><div class='checkBox' id='checkBox-"
-                        + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
-                        + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
-                        + itemsArray[q].idn + "'></div></div>");
+                    if (itemsArray[q].istate === "p")
+                    {
+                        $('#items_wrap').append("<div class='item' id='" + itemsArray[q].idn + "'><div class='checkBox' id='checkBox-"
+                            + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
+                            + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
+                            + itemsArray[q].idn + "'></div></div>");
+                    }
                 }
             }
             show = 1;
-            $(this).addClass('checked');
+            $('#bottom_showPending').addClass('checked');
             $('#bottom_showAll').removeClass('checked');
             $('#bottom_showDone').removeClass('checked');
         };
@@ -221,19 +228,40 @@ $(document).ready(
             $('.item').remove();
             for (var q = 0; q < itemsArray.length; q++)
             {
-                if (itemsArray[q].istate === "d")
+                if (itemsArray[q].istate !== "del")
                 {
-                    $('#items_wrap').append("<div class='item done' id='" + itemsArray[q].idn + "'><div class='checkBox checked' id='checkBox-"
-                        + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
-                        + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
-                        + itemsArray[q].idn + "'></div></div>");
+                    if (itemsArray[q].istate === "d")
+                    {
+                        $('#items_wrap').append("<div class='item done' id='" + itemsArray[q].idn + "'><div class='checkBox checked' id='checkBox-"
+                            + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
+                            + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
+                            + itemsArray[q].idn + "'></div></div>");
+                    }
                 }
             }
             show = 2;
-            $(this).addClass('checked');
+            $('#bottom_showDone').addClass('checked');
             $('#bottom_showPending').removeClass('checked');
             $('#bottom_showAll').removeClass('checked');
         };
+
+
+        /*// PAGINATION / NAVIGATION
+        var pagination;
+        pagination = function ()
+        {
+            var iCreated = $('.item').length;  // get the number of currently shown items
+            if (iCreated > iNumber)
+            {
+
+            }
+            else
+            {
+                $('#nav_block').innerHTML = "Page: 1";
+            }
+
+        };*/
+
 
 
         // SHOW STATS ON STARTUP
@@ -270,6 +298,8 @@ $(document).ready(
                 stats();
             }
         };
+
+
         //*****************************************************************************************
         // BUTTONS / INTERACTIONS
         //*****************************************************************************************
@@ -297,12 +327,15 @@ $(document).ready(
 
         // show all tasks
         $('#bottom_showAll').on('click', showAll);
+        $('#bottom_showAll_text').on('click', showAll);
 
         // show pending tasks
         $('#bottom_showPending').on('click', showPending);
+        $('#bottom_showPending_text').on('click', showPending);
 
         // show done tasks
         $('#bottom_showDone').on('click', showDone);
+        $('#bottom_showDone_text').on('click', showDone);
 
         // clear arrays and html
         $('#clearButton').on('click', clearAll);

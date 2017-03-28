@@ -70,6 +70,11 @@ html, body {
 }
 .bottom_radio:hover {
     opacity: .7;
+    cursor: pointer;
+}
+.bottom_radio_text {
+    cursor: pointer;
+    align-self: center;
 }
 
 
@@ -130,6 +135,7 @@ html, body {
 }
 #items_wrap .item .checkBox:hover {
     opacity: .7;
+    cursor: pointer;
 }
 .checked {
     background-image: url("check_x15.png");
@@ -148,6 +154,7 @@ html, body {
 }
 #items_wrap .item .killItem:hover {
     opacity: .7;
+    cursor: pointer;
 }
 
 .editItem {
@@ -160,10 +167,13 @@ input {
     width: 300px;
 }
 
-#markAll {
-    width: 15px;
-    height: 15px;
-    align-self: center;
-    background-color: #ff9999;
-    margin-right:5px;
+#nav_block {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 2px 5%;
+    background-color: inherit;
+    color: #040404;
 }

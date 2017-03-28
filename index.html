@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="scripts/jquery-3-1-1.js"></script>
     <script src="scripts/engine.js"></script>
+    <script src="scripts/pages.js"></script>
 </head>
 <body>
 <div class="body_wrap">
@@ -27,12 +28,26 @@
 
     </div>
 
-    <!--- bottom block with controls -->
+    <!-- navigation / pagination -->
+    <div id="nav_block"></div>
+
+    <script>
+        var pager = new Imtech.Pager();
+        $(document).ready(function() {
+            pager.paragraphsPerPage = 3; // set amount elements per page
+            pager.pagingContainer = $('#items_wrap'); // set of main container
+            pager.paragraphs = $('div.item', pager.pagingContainer); // set of required containers
+            pager.showPage(1);
+        });
+    </script>
+
+
+        <!--- bottom block with controls -->
     <div class="menu_block menu_text">
 
-        <div id="bottom_showAll" class="bottom_radio checked"></div><div style="align-self: center;">Show all</div>
-        <div id="bottom_showPending" class="bottom_radio"></div><div style="align-self: center;">Show pending</div>
-        <div id="bottom_showDone" class="bottom_radio"></div><div style="align-self: center;">Show completed</div>
+        <div id="bottom_showAll" class="bottom_radio checked"></div><div id="bottom_showAll_text" class="bottom_radio_text">Show all</div>
+        <div id="bottom_showPending" class="bottom_radio"></div><div id="bottom_showPending_text" class="bottom_radio_text">Show pending</div>
+        <div id="bottom_showDone" class="bottom_radio"></div><div id="bottom_showDone_text" class="bottom_radio_text">Show completed</div>
 
         <div id="clearButton">Clear all</div>
 
