@@ -177,3 +177,19 @@ input {
     background-color: inherit;
     color: #040404;
 }
+.pageN {
+    display: flex;
+    padding: 3px;
+    margin: 0 3px;
+    background-color: #eaeaea;
+    align-self: center;
+    width: 18px;
+    justify-content: center;
+}
+.selectedN {
+    background-color: #d0d0d0;
+}
+.pageN:hover {
+    background-color: #d0d0d0;
+    cursor: pointer;
+}

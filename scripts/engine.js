@@ -15,13 +15,15 @@ $(document).ready(
         var show = 0; // what to show -> show status: 0 = all, 1 = pending, 2 = done
 
         //*****PAGINATION*********
-        var iNumber = 5;    // number of items on page
-        var firstPage = 1;  //
-        var lastPage = 1;   //
+        var iNumber = 5;        // number of items on page
+        var selectedPage = 1;   // default selected page
+        var iCreated;
+        var pagesNumber;
         //************************
 
         var sid = 0; // selected id
         var sval = ""; // selected value
+
         //*****************************************************************************************
         // FUNCTIONS
         //*****************************************************************************************
@@ -31,7 +33,7 @@ $(document).ready(
             document.getElementById("pending").innerHTML = 'Pending: ' + pend;
             document.getElementById("done").innerHTML = 'Done: ' + done;
             document.getElementById("currentID").innerHTML = '| Next ID: ' + itemsArray.length;
-            document.getElementById("selID").innerHTML = '| Selected ID: ' + sid + '; value: ' + sval;
+            document.getElementById("selID").innerHTML = '| Selected ID: ' + sid + '; value: ' + sval + '| Elements: ' + iCreated + '; pages: ' + pagesNumber;
         };
 
 
@@ -65,6 +67,8 @@ $(document).ready(
                         if (show === 2)
                         {
                             $(this).parent('div').remove();
+                            // call pagination function
+                            pagination();
                         }
                         break;
                     }
@@ -79,6 +83,8 @@ $(document).ready(
                         if (show === 1)
                         {
                             $(this).parent('div').remove();
+                            // call pagination function
+                            pagination();
                         }
                         break;
                     }
@@ -147,6 +153,8 @@ $(document).ready(
                     //itemsArray.splice(i, 1);                      // deleting item OR...
                     itemsArray[i].istate = "del";                   // ...change state to the "deleted"
                     $(this).parent('div').remove();
+                    // call pagination function
+                    pagination();
                 }
             }
             stats();
@@ -164,6 +172,7 @@ $(document).ready(
 
             $('.item').remove();    // remove all of the "item" class divs
 
+            pagination();
             stats();
         };
 
@@ -171,23 +180,24 @@ $(document).ready(
         // "SHOW ALL TASKS" FUNCTION
         var showAll;
         showAll = function () {
-            $('.item').remove();
-
-            for (var q = 0; q < itemsArray.length; q++)
+            $('.item').remove();                // clear html
+            selectedPage = 1;                   // selected page by default
+            $('#nav_block > #1').addClass('selectedN');
+            for (var i = selectedPage * iNumber - iNumber; i < i + iNumber; i++)
             {
-                if (itemsArray[q].istate !== "del")
+                if (itemsArray[i].istate !== "del")
                 {
-                    if (itemsArray[q].istate === "p") {
-                        $('#items_wrap').append("<div class='item' id='" + itemsArray[q].idn + "'><div class='checkBox' id='checkBox-"
-                            + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
-                            + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
-                            + itemsArray[q].idn + "'></div></div>");
+                    if (itemsArray[i].istate === "p") {
+                        $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
+                            + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                            + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                            + itemsArray[i].idn + "'></div></div>");
                     }
                     else {
-                        $('#items_wrap').append("<div class='item done' id='" + itemsArray[q].idn + "'><div class='checkBox checked' id='checkBox-"
-                            + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
-                            + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
-                            + itemsArray[q].idn + "'></div></div>");
+                        $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
+                            + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                            + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                            + itemsArray[i].idn + "'></div></div>");
                     }
                 }
             }
@@ -195,6 +205,8 @@ $(document).ready(
             $('#bottom_showAll').addClass('checked');
             $('#bottom_showPending').removeClass('checked');
             $('#bottom_showDone').removeClass('checked');
+            // call pagination function
+            pagination();
         };
 
 
@@ -202,6 +214,7 @@ $(document).ready(
         var showPending;
         showPending = function () {
             $('.item').remove();
+            selectedPage = 1;
             for (var q = 0; q < itemsArray.length; q++)
             {
                 if (itemsArray[q].istate !== "del")
@@ -219,6 +232,8 @@ $(document).ready(
             $('#bottom_showPending').addClass('checked');
             $('#bottom_showAll').removeClass('checked');
             $('#bottom_showDone').removeClass('checked');
+            // call pagination function
+            pagination();
         };
 
 
@@ -226,6 +241,7 @@ $(document).ready(
         var showDone;
         showDone = function () {
             $('.item').remove();
+            selectedPage = 1;
             for (var q = 0; q < itemsArray.length; q++)
             {
                 if (itemsArray[q].istate !== "del")
@@ -243,29 +259,120 @@ $(document).ready(
             $('#bottom_showDone').addClass('checked');
             $('#bottom_showPending').removeClass('checked');
             $('#bottom_showAll').removeClass('checked');
+            // call pagination function
+            pagination();
         };
 
 
-        /*// PAGINATION / NAVIGATION
+
+
+
+
+
+
+
+        // PAGINATION / NAVIGATION
         var pagination;
         pagination = function ()
         {
-            var iCreated = $('.item').length;  // get the number of currently shown items
-            if (iCreated > iNumber)
-            {
+            iCreated = $('.item').length;  // get the number of currently shown items
+            pagesNumber = Math.ceil(iCreated / iNumber);
 
+            // NAVIGATION BLOCK
+            if (pagesNumber <= 1)
+            {
+                document.getElementById('nav_block').innerHTML = '<div class="pageN" id="1">' + pagesNumber;
             }
             else
             {
-                $('#nav_block').innerHTML = "Page: 1";
+                document.getElementById('nav_block').innerHTML = "";
+                for (var i = 1; i <= pagesNumber; i++)
+                {
+                    $('#nav_block').append('<div class="pageN" id="' + i + '">' + i + '</div>');
+                }
             }
 
-        };*/
+            // REDRAWING ITEMS / DIVISION ON PAGES
+            var redrawItems;
+            redrawItems = function ()
+            {
+                document.getElementById('items_wrap').innerHTML = "";
+                if (show = 0)
+                {
+                    for (var i = selectedPage * iNumber - iNumber + 1; i < iNumber + 1; i++)
+                    {
+                        if (itemsArray[i].istate !== "del")
+                        {
+                            if (itemsArray[q].istate === "p") {
+                                $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
+                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                    + itemsArray[i].idn + "'></div></div>");
+                            }
+                            else {
+                                $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
+                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                    + itemsArray[i].idn + "'></div></div>");
+                            }
+                        }
+                    }
+                }
+                if (show = 1)
+                {
+                    for (var i = selectedPage * iNumber - iNumber + 1; i < iNumber + 1; i++)
+                    {
+                        if (itemsArray[i].istate !== "del")
+                        {
+                            $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
+                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                + itemsArray[i].idn + "'></div></div>");
+                        }
+                    }
+                }
+                if (show = 2)
+                {
+                    for (var i = selectedPage * iNumber - iNumber + 1; i < iNumber + 1; i++)
+                    {
+                        if (itemsArray[i].istate !== "del")
+                        {
+                            $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
+                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                + itemsArray[i].idn + "'></div></div>");
+                        }
+                    }
+                }
+            };
+
+            var changePage;
+            changePage = function ()
+            {
+                selectedPage = $(this).attr('id');                              // get ID of the selected page
+                $('#nav_block > div.selectedN').removeClass('selectedN');       // remove selection FROM ALL
+                $(this).addClass('selectedN')                                   // add selection TO SPECIFIED
+
+                redrawItems();
+            };
+
+            // on page click
+            $('#nav_block').on('click', '.pageN', changePage);
+
+            stats();
+        };
 
 
 
-        // SHOW STATS ON STARTUP
+
+
+
+
+
+
+        // SHOW STATS & PAGE ON STARTUP
         stats();
+        pagination();
 
 
         // "ADD ITEM" FUNCTION
@@ -288,6 +395,9 @@ $(document).ready(
                     addToList();
                     //showAll();
                 }
+
+                // call pagination function
+                pagination();
 
                 // reset the input field and focus it
                 $('#text').val("").focus();
