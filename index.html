@@ -32,18 +32,19 @@
     <div id="nav_block" class="menu_text"></div>
 
     <!--- bottom block with controls -->
-    <div class="menu_block menu_text">
+    <div class="menu_block__bottom menu_text">
 
-        <div id="bottom_showAll" class="bottom_radio checked"></div><div id="bottom_showAll_text" class="bottom_radio_text">Show all</div>
-        <div id="bottom_showPending" class="bottom_radio"></div><div id="bottom_showPending_text" class="bottom_radio_text">Show pending</div>
-        <div id="bottom_showDone" class="bottom_radio"></div><div id="bottom_showDone_text" class="bottom_radio_text">Show completed</div>
+        <div class="menu_block__bottom_left">
+            <div id="bottom_showAll" class="bottom_radio checked"></div><div id="bottom_showAll_text" class="bottom_radio_text">Show all</div>
+            <div id="bottom_showPending" class="bottom_radio"></div><div id="bottom_showPending_text" class="bottom_radio_text">Show pending</div>
+            <div id="bottom_showDone" class="bottom_radio"></div><div id="bottom_showDone_text" class="bottom_radio_text">Show completed</div>
+        </div>
 
-        <div id="clearButton">Clear all</div>
-
-        <div id="pending" class="stats"></div>
-        <div id="done" class="stats"></div>
-        <div id="currentID" class="stats"></div>
-        <div id="selID" class="stats"></div>
+        <div class="menu_block__bottom_right">
+            <div id="pending" class="stats"></div>
+            <div id="done" class="stats"></div>
+            <div id="clearButton">Clear all</div>
+        </div>
 
     </div>
     <div class="copyright">by Peter Dyumin, 2017</div>

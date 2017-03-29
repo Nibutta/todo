@@ -21,8 +21,6 @@ $(document).ready(
         var itemsNumber = 0;    // how many items to show
         //************************
 
-        var sid = 0; // selected id
-        var sval = ""; // selected value
 
         //*****************************************************************************************
         // FUNCTIONS
@@ -32,8 +30,6 @@ $(document).ready(
         stats = function () {
             document.getElementById("pending").innerHTML = 'Pending: ' + pend;
             document.getElementById("done").innerHTML = 'Done: ' + done;
-            document.getElementById("currentID").innerHTML = '| Next ID: ' + itemsArray.length;
-            document.getElementById("selID").innerHTML = '| Selected ID: ' + sid + '; value: ' + sval + '| Elements: ' + itemsNumber + '; pages: ' + pagesNumber;
         };
 
 
@@ -78,8 +74,6 @@ $(document).ready(
                     }
                 }
             }
-            sid = itemsArray[selectedID].idn;
-            sval = itemsArray[selectedID].ivalue;
             stats();
         };
 
@@ -188,18 +182,18 @@ $(document).ready(
                     {
                         if (itemsArray[i].istate === "p")
                         {
-                            $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
-                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                + itemsArray[i].idn + "'></div></div>");
+                            $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn
+                                + "'><div class='checkBox' id='checkBox-" + itemsArray[i].idn
+                                + "'></div><div id='content'>" + itemsArray[i].ivalue
+                                + "</div><div class='killItem' id='killItem-" + itemsArray[i].idn + "'></div></div>");
                             counter++;
                         }
                         else
                         {
-                            $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
-                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                + itemsArray[i].idn + "'></div></div>");
+                            $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn
+                                + "'><div class='checkBox checked' id='checkBox-" + itemsArray[i].idn
+                                + "'></div><div id='content'>" + itemsArray[i].ivalue
+                                + "</div><div class='killItem' id='killItem-" + itemsArray[i].idn + "'></div></div>");
                             counter++;
                         }
                     }
@@ -226,10 +220,10 @@ $(document).ready(
                     {
                         if (itemsArray[i].istate === "p")
                         {
-                            $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
-                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                + itemsArray[i].idn + "'></div></div>");
+                            $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn
+                                + "'><div class='checkBox' id='checkBox-" + itemsArray[i].idn
+                                + "'></div><div id='content'>" + itemsArray[i].ivalue
+                                + "</div><div class='killItem' id='killItem-" + itemsArray[i].idn + "'></div></div>");
                             counter++;
                         }
                     }
@@ -256,10 +250,10 @@ $(document).ready(
                     {
                         if (itemsArray[i].istate === "d")
                         {
-                            $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
-                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                + itemsArray[i].idn + "'></div></div>");
+                            $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn
+                                + "'><div class='checkBox checked' id='checkBox-" + itemsArray[i].idn
+                                + "'></div><div id='content'>" + itemsArray[i].ivalue
+                                + "</div><div class='killItem' id='killItem-" + itemsArray[i].idn + "'></div></div>");
                             counter++;
                         }
                     }
@@ -335,9 +329,6 @@ $(document).ready(
             // get ID of the selected page
             selectedPage = $(this).attr('id');
 
-           /* $('#nav_block > div.pageN').removeClass('selectedN');       // remove selection FROM ALL
-            $('#nav_block').child('#' + selectedPage).addClass('selectedN'); // mark selected */
-
             draw();
             stats();
         };
@@ -377,6 +368,9 @@ $(document).ready(
                     $('#nav_block').append('<div class="pageN" id="' + i + '">' + i + '</div>');
                 }
             }
+            $('#nav_block > div.pageN').removeClass('selectedN');       // remove selection FROM ALL
+            $('#nav_block').find('div').eq(selectedPage - 1).addClass('selectedN');
+            //$('#nav_block').addClass('selectedN'); // mark selected
         };
 
 

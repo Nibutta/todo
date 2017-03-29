@@ -17,7 +17,7 @@ html, body {
     flex-direction: column;
     justify-content: flex-start;
     width: 50%;
-    min-width: 450px;
+    min-width: 625px;
     padding: 10px 0;
     margin: 10px auto;
     background-color: #fafafa;
@@ -50,6 +50,29 @@ html, body {
     background: linear-gradient(to right, #fafafa, #e0e0e0, #fafafa);
     color: #040404;
 }
+.menu_block__bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 5px 5%;
+    background: linear-gradient(to right, #fafafa, #e0e0e0, #fafafa);
+    color: #040404;
+}
+.menu_block__bottom_left, .menu_block__bottom_right {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.menu_block__bottom_left {
+    justify-content: flex-start;
+}
+.menu_block__bottom_right {
+    justify-content: flex-end;
+}
+
+
 .menu_text {
     text-align: left;
     font-size: 14px;
@@ -76,11 +99,6 @@ html, body {
     cursor: pointer;
     align-self: center;
 }
-
-
-
-
-
 #addButton, #clearButton { /* divs as buttons */
     display: inline-block;
     background-color: #3f2e5b;
@@ -88,6 +106,7 @@ html, body {
     text-align:center;
     margin: 0 10px;
     padding: 3px 10px;
+    height: 26px;
 }
 #addButton {
     width: 70px;
@@ -108,7 +127,6 @@ html, body {
     font-size: 16px;
     font-weight: 300;
 }
-
 #items_wrap .item { /* each div contains checkbox, item and remove button */
     display: flex;
     flex-direction: row;
@@ -121,11 +139,9 @@ html, body {
     margin-bottom: 2px;
     padding: 3px 5%;
 }
-
 #items_wrap .item:hover {
     background-color: #f1f1f1;
 }
-
 #items_wrap .item .checkBox {
     height: 15px;
     width: 15px;
@@ -143,7 +159,6 @@ html, body {
 .done {
     text-decoration: line-through;
 }
-
 #items_wrap .item .killItem { /* remove button [x] */
     background-color: inherit;
     width: 15px;
@@ -156,17 +171,14 @@ html, body {
     opacity: .7;
     cursor: pointer;
 }
-
 .editItem {
     padding: 5px 7px;
     width: 300px;
 }
-
 input {
     padding: 5px 7px;
     width: 300px;
 }
-
 #nav_block {
     display: flex;
     flex-direction: row;
