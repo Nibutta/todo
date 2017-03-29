@@ -12,13 +12,13 @@ $(document).ready(
 
         var done = 0; // done tasks
         var pend = 0; // pending tasks
-        var show = 0; // what to show -> show status: 0 = all, 1 = pending, 2 = done
+        var whatToShow = 0; // what to show -> show status: 0 = all, 1 = pending, 2 = done
 
         //*****PAGINATION*********
-        var iNumber = 5;        // number of items on page
-        var selectedPage = 1;   // default selected page
-        var iCreated;
-        var pagesNumber;
+        var itemsPerPage = 3;   // number of items on page
+        var selectedPage = 1;   // selected page
+        var pagesNumber = 1;    // number of pages on startup
+        var itemsNumber = 0;    // how many items to show
         //************************
 
         var sid = 0; // selected id
@@ -33,17 +33,7 @@ $(document).ready(
             document.getElementById("pending").innerHTML = 'Pending: ' + pend;
             document.getElementById("done").innerHTML = 'Done: ' + done;
             document.getElementById("currentID").innerHTML = '| Next ID: ' + itemsArray.length;
-            document.getElementById("selID").innerHTML = '| Selected ID: ' + sid + '; value: ' + sval + '| Elements: ' + iCreated + '; pages: ' + pagesNumber;
-        };
-
-
-        // "APPEND ITEMS TO HTML WHEN ADDED" FUNCTION
-        var addToList;
-        addToList = function() {
-            $('#items_wrap').append("<div class='item' id='" + itemsArray[itemID].idn + "'><div class='checkBox' id='checkBox-"
-                + itemsArray[itemID].idn + "'></div><div id='content'>" + itemsArray[itemID].ivalue + "</div> (ID: "
-                + itemsArray[itemID].idn + " / State: " + itemsArray[itemID].istate + ")<div class='killItem' id='killItem-"
-                + itemsArray[itemID].idn + "'></div></div>");
+            document.getElementById("selID").innerHTML = '| Selected ID: ' + sid + '; value: ' + sval + '| Elements: ' + itemsNumber + '; pages: ' + pagesNumber;
         };
 
 
@@ -64,11 +54,10 @@ $(document).ready(
                         pend++;
                         done--;
                         // remove from html if show status is wrong
-                        if (show === 2)
+                        if (whatToShow === 2)
                         {
                             $(this).parent('div').remove();
-                            // call pagination function
-                            pagination();
+                            draw();
                         }
                         break;
                     }
@@ -80,11 +69,10 @@ $(document).ready(
                         pend--;
                         done++;
                         // remove from html if show status is wrong
-                        if (show === 1)
+                        if (whatToShow === 1)
                         {
                             $(this).parent('div').remove();
-                            // call pagination function
-                            pagination();
+                            draw();
                         }
                         break;
                     }
@@ -150,11 +138,10 @@ $(document).ready(
                     {
                         done--;
                     }
-                    //itemsArray.splice(i, 1);                      // deleting item OR...
+                    //itemsArray.splice(i, 1);                      // delete item OR...
                     itemsArray[i].istate = "del";                   // ...change state to the "deleted"
                     $(this).parent('div').remove();
-                    // call pagination function
-                    pagination();
+                    draw();
                 }
             }
             stats();
@@ -172,116 +159,212 @@ $(document).ready(
 
             $('.item').remove();    // remove all of the "item" class divs
 
-            pagination();
+            navigation();
             stats();
         };
 
 
-        // "SHOW ALL TASKS" FUNCTION
-        var showAll;
-        showAll = function () {
-            $('.item').remove();                // clear html
-            selectedPage = 1;                   // selected page by default
-            $('#nav_block > #1').addClass('selectedN');
-            for (var i = selectedPage * iNumber - iNumber; i < i + iNumber; i++)
+        // "DRAW" FUNCTION
+        var draw;
+        draw = function () {
+
+            $('.item').remove();                    // clear html
+            var counter = 1;                        // counter for drawn items
+
+            // if it is needed to show all items
+            if (whatToShow === 0)
             {
-                if (itemsArray[i].istate !== "del")
+                // how many items to show?
+                itemsNumber = pend + done;
+
+                // how many pages?
+                pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
+
+                // show itemsPerPage items on a page, depending on the selected page
+                for (var i = selectedPage * itemsPerPage - itemsPerPage; i < itemsArray.length; i++)
                 {
-                    if (itemsArray[i].istate === "p") {
-                        $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
-                            + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                            + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                            + itemsArray[i].idn + "'></div></div>");
-                    }
-                    else {
-                        $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
-                            + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                            + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                            + itemsArray[i].idn + "'></div></div>");
+                    if (itemsArray[i].istate !== "del")
+                    {
+                        if (counter <= itemsPerPage)
+                        {
+                            if (itemsArray[i].istate === "p")
+                            {
+                                $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
+                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                    + itemsArray[i].idn + "'></div></div>");
+                                counter++;
+                            }
+                            else
+                            {
+                                $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
+                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                    + itemsArray[i].idn + "'></div></div>");
+                                counter++;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
             }
-            show = 0;
+
+            // if it is needed to show pending items
+            if (whatToShow === 1)
+            {
+                // how many items to show?
+                itemsNumber = pend;
+
+                // how many pages?
+                pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
+
+                // show itemsPerPage items on a page, depending on the selected page
+                for (var i = selectedPage * itemsPerPage - itemsPerPage; i < itemsArray.length; i++)
+                {
+                    if (itemsArray[i].istate !== "del")
+                    {
+                        if (counter <= itemsPerPage)
+                        {
+                            if (itemsArray[i].istate === "p")
+                            {
+                                $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
+                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                    + itemsArray[i].idn + "'></div></div>");
+                                counter++;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // if it is needed to show done items
+            if (whatToShow === 2)
+            {
+                // how many items to show?
+                itemsNumber = done;
+
+                // how many pages?
+                pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
+
+                // show itemsPerPage items on a page, depending on the selected page
+                for (var i = selectedPage * itemsPerPage - itemsPerPage; i < itemsArray.length; i++)
+                {
+                    if (itemsArray[i].istate !== "del")
+                    {
+                        if (counter <= itemsPerPage)
+                        {
+                            if (itemsArray[i].istate === "d")
+                            {
+                                $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
+                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                    + itemsArray[i].idn + "'></div></div>");
+                                counter++;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        };
+
+
+        // "SHOW ALL TASKS" FUNCTION (ON "SHOW ALL" CLICK)
+        var showAll;
+        showAll = function () {
+
+            selectedPage = 1;                   // selected page by default, when 'Show all' is clicked
+            whatToShow = 0;                     // set to show all items
+
+            // add selection mark to page #1
+            $('#nav_block > #1').addClass('selectedN');
+
+            // draw items
+            draw();
+            navigation();
+
             $('#bottom_showAll').addClass('checked');
             $('#bottom_showPending').removeClass('checked');
             $('#bottom_showDone').removeClass('checked');
-            // call pagination function
-            pagination();
         };
 
 
-        // "SHOW PENDING TASKS" FUNCTION
+        // "SHOW PENDING TASKS" FUNCTION (ON "SHOW PENDING" CLICK)
         var showPending;
         showPending = function () {
-            $('.item').remove();
-            selectedPage = 1;
-            for (var q = 0; q < itemsArray.length; q++)
-            {
-                if (itemsArray[q].istate !== "del")
-                {
-                    if (itemsArray[q].istate === "p")
-                    {
-                        $('#items_wrap').append("<div class='item' id='" + itemsArray[q].idn + "'><div class='checkBox' id='checkBox-"
-                            + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
-                            + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
-                            + itemsArray[q].idn + "'></div></div>");
-                    }
-                }
-            }
-            show = 1;
+
+            selectedPage = 1;                   // selected page by default, when 'Show pending' is clicked
+            whatToShow = 1;                     // set to show pending items
+
+            // add selection mark to page #1
+            $('#nav_block > #1').addClass('selectedN');
+
+            draw();
+            navigation();
+
             $('#bottom_showPending').addClass('checked');
             $('#bottom_showAll').removeClass('checked');
             $('#bottom_showDone').removeClass('checked');
-            // call pagination function
-            pagination();
         };
 
 
-        // "SHOW DONE TASKS" FUNCTION
+        // "SHOW DONE TASKS" FUNCTION (ON "SHOW DONE" CLICK)
         var showDone;
         showDone = function () {
-            $('.item').remove();
+
             selectedPage = 1;
-            for (var q = 0; q < itemsArray.length; q++)
-            {
-                if (itemsArray[q].istate !== "del")
-                {
-                    if (itemsArray[q].istate === "d")
-                    {
-                        $('#items_wrap').append("<div class='item done' id='" + itemsArray[q].idn + "'><div class='checkBox checked' id='checkBox-"
-                            + itemsArray[q].idn + "'></div><div id='content'>" + itemsArray[q].ivalue + "</div> (ID: "
-                            + itemsArray[q].idn + " / State: " + itemsArray[q].istate + ")<div class='killItem' id='killItem-"
-                            + itemsArray[q].idn + "'></div></div>");
-                    }
-                }
-            }
-            show = 2;
+            whatToShow = 2;                     // set to show pending items
+
+            // add selection mark to page #1
+            $('#nav_block > #1').addClass('selectedN');
+
+            draw();
+            navigation();
+
             $('#bottom_showDone').addClass('checked');
             $('#bottom_showPending').removeClass('checked');
             $('#bottom_showAll').removeClass('checked');
-            // call pagination function
-            pagination();
         };
 
 
-
-
-
-
-
-
-
-        // PAGINATION / NAVIGATION
+        // "PAGINATION" FUNCTION (ON PAGE NUMBER CLICK)
         var pagination;
         pagination = function ()
         {
-            iCreated = $('.item').length;  // get the number of currently shown items
-            pagesNumber = Math.ceil(iCreated / iNumber);
+            // get ID of the selected page
+            selectedPage = $(this).attr('id');
 
-            // NAVIGATION BLOCK
-            if (pagesNumber <= 1)
+            $('#nav_block > div.selectedN').removeClass('selectedN');       // remove selection FROM ALL
+            $(this).addClass('selectedN');                                  // mark selected
+
+            draw();
+            navigation();
+            stats();
+        };
+
+
+        // "NAVIGATION" FUNCTION (SHOWS NAVIGATION PANEL)
+        var navigation;
+        navigation = function () {
+
+            // re-count items / pages for the case of deletion / status change
+
+
+            if (pagesNumber < 1)
             {
-                document.getElementById('nav_block').innerHTML = '<div class="pageN" id="1">' + pagesNumber;
+                pagesNumber = 1;
+                document.getElementById('nav_block').innerHTML = '<div class="pageN" id="1">' + pagesNumber + '</div>';
             }
             else
             {
@@ -291,88 +374,12 @@ $(document).ready(
                     $('#nav_block').append('<div class="pageN" id="' + i + '">' + i + '</div>');
                 }
             }
-
-            // REDRAWING ITEMS / DIVISION ON PAGES
-            var redrawItems;
-            redrawItems = function ()
-            {
-                document.getElementById('items_wrap').innerHTML = "";
-                if (show = 0)
-                {
-                    for (var i = selectedPage * iNumber - iNumber + 1; i < iNumber + 1; i++)
-                    {
-                        if (itemsArray[i].istate !== "del")
-                        {
-                            if (itemsArray[q].istate === "p") {
-                                $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
-                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                    + itemsArray[i].idn + "'></div></div>");
-                            }
-                            else {
-                                $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
-                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                    + itemsArray[i].idn + "'></div></div>");
-                            }
-                        }
-                    }
-                }
-                if (show = 1)
-                {
-                    for (var i = selectedPage * iNumber - iNumber + 1; i < iNumber + 1; i++)
-                    {
-                        if (itemsArray[i].istate !== "del")
-                        {
-                            $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
-                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                + itemsArray[i].idn + "'></div></div>");
-                        }
-                    }
-                }
-                if (show = 2)
-                {
-                    for (var i = selectedPage * iNumber - iNumber + 1; i < iNumber + 1; i++)
-                    {
-                        if (itemsArray[i].istate !== "del")
-                        {
-                            $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
-                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                + itemsArray[i].idn + "'></div></div>");
-                        }
-                    }
-                }
-            };
-
-            var changePage;
-            changePage = function ()
-            {
-                selectedPage = $(this).attr('id');                              // get ID of the selected page
-                $('#nav_block > div.selectedN').removeClass('selectedN');       // remove selection FROM ALL
-                $(this).addClass('selectedN')                                   // add selection TO SPECIFIED
-
-                redrawItems();
-            };
-
-            // on page click
-            $('#nav_block').on('click', '.pageN', changePage);
-
-            stats();
         };
 
 
-
-
-
-
-
-
-
-        // SHOW STATS & PAGE ON STARTUP
+        // SHOW STATS & NAVIGATION PANEL ON STARTUP
         stats();
-        pagination();
+        navigation();
 
 
         // "ADD ITEM" FUNCTION
@@ -389,15 +396,11 @@ $(document).ready(
                 // push item to the array of objects
                 itemsArray[itemID] = taskItem;
 
-                // append item to the html list on the adding only if "show" has the right value
-                if (show !== 2)
+                // show item in the list if show !== 2 (done)
+                if (whatToShow !== 2)
                 {
-                    addToList();
-                    //showAll();
+                    draw();
                 }
-
-                // call pagination function
-                pagination();
 
                 // reset the input field and focus it
                 $('#text').val("").focus();
@@ -405,6 +408,7 @@ $(document).ready(
                 pend++;
                 itemID++;
 
+                navigation();
                 stats();
             }
         };
@@ -434,6 +438,9 @@ $(document).ready(
 
         // apply item value changes on ENTER
         $('#items_wrap').on('keydown', '.item > .editItem', applyValue);
+
+        // page number click
+        $('#nav_block').on('click', '.pageN', pagination);
 
         // show all tasks
         $('#bottom_showAll').on('click', showAll);
