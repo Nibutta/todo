@@ -28,17 +28,17 @@ $(document).ready(
         // "SHOW STATS" FUNCTION
         var stats;
         stats = function () {
-            document.getElementById("pending").innerHTML = 'Pending: ' + pend;
-            document.getElementById("done").innerHTML = 'Done: ' + done;
+            $('#pending').html('Pending: ' + pend); //TODO -> done.
+            $('#done').html('Done: ' + done);
         };
 
 
         // "CHANGE ITEM STATUS" FUNCTION
         var changeStatus;
-        changeStatus = function () {
+        changeStatus = function () { //TODO
             // get ID of the selected item
             var selectedID = $(this).parent('div').attr('id');
-            for (var i = 0; i < itemsArray.length; i++)
+            for (var i = 0; i < itemsArray.length; i++) //TODO forEach
             {
                 if(itemsArray[i].idn === +selectedID)
                 {
@@ -82,7 +82,7 @@ $(document).ready(
         var editValue;
         editValue = function ()
         {
-            var thisData = this.innerHTML, $el = $('<input type="text" class="editItem"/>');
+            var thisData = $(this).html(), $el = $('<input type="text" class="editItem"/>'); //todo use jquery -> done.
             $(this).replaceWith($el);
             $el.val(thisData).focus();
         };
@@ -132,9 +132,8 @@ $(document).ready(
                     {
                         done--;
                     }
-                    itemsArray.splice(i, 1);                      // delete item OR...
-                    //itemsArray[i].istate = "del";               // ...change state to the "deleted"
-                    // itemID--;
+                    itemsArray.splice(i, 1);                      // delete item
+                    itemID--;
                     $(this).parent('div').remove();
                     draw();
                 }
@@ -339,38 +338,42 @@ $(document).ready(
         navigation = function () {
 
             // re-count items / pages for the case of deletion / status change
-            if (whatToShow === 0)
-            {
-                itemsNumber = pend + done;
-                pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
-            }
-            if (whatToShow === 1)
-            {
-                itemsNumber = pend;
-                pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
-            }
-            if (whatToShow === 2)
-            {
-                itemsNumber = done;
-                pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
+            switch (whatToShow) { //todo use switch case -> done.
+                case 0:
+                {
+                    itemsNumber = pend + done;
+                    pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
+                    break;
+                }
+                case 1:
+                {
+                    itemsNumber = pend;
+                    pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
+                    break;
+                }
+                case 2:
+                {
+                    itemsNumber = done;
+                    pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
+                    break;
+                }
             }
 
             if (pagesNumber < 1)
             {
                 pagesNumber = 1;
-                document.getElementById('nav_block').innerHTML = '<div class="pageN" id="1">' + pagesNumber + '</div>';
+                $('#nav_block').html('<div class="pageN" id="1">' + pagesNumber + '</div>'); //todo use jquery -> done.
             }
             else
             {
-                document.getElementById('nav_block').innerHTML = "";
+                $('#nav_block').html(""); //todo use jquery -> done.
                 for (var i = 1; i <= pagesNumber; i++)
                 {
                     $('#nav_block').append('<div class="pageN" id="' + i + '">' + i + '</div>');
                 }
             }
-            $('#nav_block > div.pageN').removeClass('selectedN');       // remove selection FROM ALL
+            $('#nav_block > div.pageN').removeClass('selectedN');
             $('#nav_block').find('div').eq(selectedPage - 1).addClass('selectedN');
-            //$('#nav_block').addClass('selectedN'); // mark selected
         };
 
 
@@ -391,8 +394,8 @@ $(document).ready(
                 var taskItem = {istate: itemState, idn: itemID, ivalue: itemValue}; // item object
 
                 // push item to the array of objects
-                // itemsArray[itemID] = taskItem;
-                itemsArray.push(taskItem);
+                 itemsArray[itemID] = taskItem;
+                //itemsArray.push(taskItem);
 
                 // reset the input field and focus it
                 $('#text').val("").focus();

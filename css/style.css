@@ -71,8 +71,6 @@ html, body {
 .menu_block__bottom_right {
     justify-content: flex-end;
 }
-
-
 .menu_text {
     text-align: left;
     font-size: 14px;
@@ -115,7 +113,6 @@ html, body {
     cursor: pointer;
     opacity: .7;
 }
-
 #items_wrap { /* wrap block for the items */
     display: flex;
     flex-direction: column;
