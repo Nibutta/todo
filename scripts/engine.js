@@ -138,8 +138,9 @@ $(document).ready(
                     {
                         done--;
                     }
-                    //itemsArray.splice(i, 1);                      // delete item OR...
-                    itemsArray[i].istate = "del";                   // ...change state to the "deleted"
+                    itemsArray.splice(i, 1);                      // delete item OR...
+                    //itemsArray[i].istate = "del";               // ...change state to the "deleted"
+                    // itemID--;
                     $(this).parent('div').remove();
                     draw();
                 }
@@ -169,7 +170,7 @@ $(document).ready(
         draw = function () {
 
             $('.item').remove();                    // clear html
-            var counter = 1;                        // counter for drawn items
+            var counter = 0;                        // counter for drawn items
 
             // if it is needed to show all items
             if (whatToShow === 0)
@@ -183,31 +184,28 @@ $(document).ready(
                 // show itemsPerPage items on a page, depending on the selected page
                 for (var i = selectedPage * itemsPerPage - itemsPerPage; i < itemsArray.length; i++)
                 {
-                    if (itemsArray[i].istate !== "del")
+                    if (counter < itemsPerPage)
                     {
-                        if (counter <= itemsPerPage)
+                        if (itemsArray[i].istate === "p")
                         {
-                            if (itemsArray[i].istate === "p")
-                            {
-                                $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
-                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                    + itemsArray[i].idn + "'></div></div>");
-                                counter++;
-                            }
-                            else
-                            {
-                                $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
-                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                    + itemsArray[i].idn + "'></div></div>");
-                                counter++;
-                            }
+                            $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
+                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                + itemsArray[i].idn + "'></div></div>");
+                            counter++;
                         }
                         else
                         {
-                            break;
+                            $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
+                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                + itemsArray[i].idn + "'></div></div>");
+                            counter++;
                         }
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }
@@ -224,23 +222,20 @@ $(document).ready(
                 // show itemsPerPage items on a page, depending on the selected page
                 for (var i = selectedPage * itemsPerPage - itemsPerPage; i < itemsArray.length; i++)
                 {
-                    if (itemsArray[i].istate !== "del")
+                    if (counter < itemsPerPage)
                     {
-                        if (counter <= itemsPerPage)
+                        if (itemsArray[i].istate === "p")
                         {
-                            if (itemsArray[i].istate === "p")
-                            {
-                                $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
-                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                    + itemsArray[i].idn + "'></div></div>");
-                                counter++;
-                            }
+                            $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn + "'><div class='checkBox' id='checkBox-"
+                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                + itemsArray[i].idn + "'></div></div>");
+                            counter++;
                         }
-                        else
-                        {
-                            break;
-                        }
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }
@@ -257,26 +252,24 @@ $(document).ready(
                 // show itemsPerPage items on a page, depending on the selected page
                 for (var i = selectedPage * itemsPerPage - itemsPerPage; i < itemsArray.length; i++)
                 {
-                    if (itemsArray[i].istate !== "del")
+                    if (counter < itemsPerPage)
                     {
-                        if (counter <= itemsPerPage)
+                        if (itemsArray[i].istate === "d")
                         {
-                            if (itemsArray[i].istate === "d")
-                            {
-                                $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
-                                    + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
-                                    + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
-                                    + itemsArray[i].idn + "'></div></div>");
-                                counter++;
-                            }
+                            $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn + "'><div class='checkBox checked' id='checkBox-"
+                                + itemsArray[i].idn + "'></div><div id='content'>" + itemsArray[i].ivalue + "</div> (ID: "
+                                + itemsArray[i].idn + " / State: " + itemsArray[i].istate + ")<div class='killItem' id='killItem-"
+                                + itemsArray[i].idn + "'></div></div>");
+                            counter++;
                         }
-                        else
-                        {
-                            break;
-                        }
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }
+            navigation();
         };
 
 
@@ -292,7 +285,6 @@ $(document).ready(
 
             // draw items
             draw();
-            navigation();
 
             $('#bottom_showAll').addClass('checked');
             $('#bottom_showPending').removeClass('checked');
@@ -311,7 +303,6 @@ $(document).ready(
             $('#nav_block > #1').addClass('selectedN');
 
             draw();
-            navigation();
 
             $('#bottom_showPending').addClass('checked');
             $('#bottom_showAll').removeClass('checked');
@@ -330,7 +321,6 @@ $(document).ready(
             $('#nav_block > #1').addClass('selectedN');
 
             draw();
-            navigation();
 
             $('#bottom_showDone').addClass('checked');
             $('#bottom_showPending').removeClass('checked');
@@ -345,11 +335,10 @@ $(document).ready(
             // get ID of the selected page
             selectedPage = $(this).attr('id');
 
-            $('#nav_block > div.selectedN').removeClass('selectedN');       // remove selection FROM ALL
-            $(this).addClass('selectedN');                                  // mark selected
+           /* $('#nav_block > div.pageN').removeClass('selectedN');       // remove selection FROM ALL
+            $('#nav_block').child('#' + selectedPage).addClass('selectedN'); // mark selected */
 
             draw();
-            navigation();
             stats();
         };
 
@@ -359,7 +348,21 @@ $(document).ready(
         navigation = function () {
 
             // re-count items / pages for the case of deletion / status change
-
+            if (whatToShow === 0)
+            {
+                itemsNumber = pend + done;
+                pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
+            }
+            if (whatToShow === 1)
+            {
+                itemsNumber = pend;
+                pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
+            }
+            if (whatToShow === 2)
+            {
+                itemsNumber = done;
+                pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
+            }
 
             if (pagesNumber < 1)
             {
@@ -394,13 +397,8 @@ $(document).ready(
                 var taskItem = {istate: itemState, idn: itemID, ivalue: itemValue}; // item object
 
                 // push item to the array of objects
-                itemsArray[itemID] = taskItem;
-
-                // show item in the list if show !== 2 (done)
-                if (whatToShow !== 2)
-                {
-                    draw();
-                }
+                // itemsArray[itemID] = taskItem;
+                itemsArray.push(taskItem);
 
                 // reset the input field and focus it
                 $('#text').val("").focus();
@@ -408,7 +406,12 @@ $(document).ready(
                 pend++;
                 itemID++;
 
-                navigation();
+                // show item in the list if show !== 2 (done)
+                if (whatToShow !== 2)
+                {
+                    draw();
+                }
+
                 stats();
             }
         };
