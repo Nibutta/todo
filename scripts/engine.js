@@ -26,25 +26,23 @@ $(document).ready(
         // FUNCTIONS
         //*****************************************************************************************
         // "SHOW STATS" FUNCTION
-        var stats;
-        stats = function () {
+        function stats () {
             $('#pending').html('Pending: ' + pend); //TODO -> done.
-            $('#done').html('Done: ' + done);
-        };
+            $('#done').html('Completed: ' + done);
+        }
 
 
         // "CHANGE ITEM STATUS" FUNCTION
-        var changeStatus;
-        changeStatus = function () { //TODO
+        function changeStatus () { //TODO -> done.
             // get ID of the selected item
             var selectedID = $(this).parent('div').attr('id');
-            for (var i = 0; i < itemsArray.length; i++) //TODO forEach
+            itemsArray.forEach(function (item)  //TODO forEach -> done.
             {
-                if(itemsArray[i].idn === +selectedID)
+                if(item.idn === +selectedID)
                 {
-                    if (itemsArray[i].istate === "d")
+                    if (item.istate === "d")
                     {
-                        itemsArray[i].istate = "p";
+                        item.istate = "p";
                         $(this).parent('div').removeClass('done');
                         $(this).removeClass('checked');
                         pend++;
@@ -53,13 +51,12 @@ $(document).ready(
                         if (whatToShow === 2)
                         {
                             $(this).parent('div').remove();
-                            draw();
                         }
-                        break;
+                        draw();
                     }
                     else
                     {
-                        itemsArray[i].istate = "d";
+                        item.istate = "d";
                         $(this).parent('div').addClass('done');
                         $(this).addClass('checked');
                         pend--;
@@ -68,29 +65,26 @@ $(document).ready(
                         if (whatToShow === 1)
                         {
                             $(this).parent('div').remove();
-                            draw();
                         }
-                        break;
+                        draw();
                     }
                 }
-            }
+            });
             stats();
-        };
+        }
 
 
         // "EDIT ITEM" FUNCTION
-        var editValue;
-        editValue = function ()
+        function editValue ()
         {
             var thisData = $(this).html(), $el = $('<input type="text" class="editItem"/>'); //todo use jquery -> done.
             $(this).replaceWith($el);
             $el.val(thisData).focus();
-        };
+        }
 
 
-        // "APPLY NEW VALUE" FUNCTION, WORKS WHILE "EDIT ITEM" IS ACTIVE
-        var applyValue;
-        applyValue = function(e)
+        // "APPLY NEW VALUE" FUNCTION, WORKS WHILE "EDIT ITEM" IS ACTIVE [***]
+        function applyValue (e)
         {
             if (e.keyCode === 13)  // if ENTER is pressed
             {
@@ -101,7 +95,7 @@ $(document).ready(
                     // changing html
                     $(this).replaceWith($('<div id="content">' + $(this).val() + '</div>'));
                     // applying new value to the array
-                    for (var i = 0; i < itemsArray.length; i++)
+                    for (var i = 0; i < itemsArray.length; i++)             // [*FOR*]
                     {
                         if (itemsArray[i].idn === +selectedID)
                         {
@@ -111,40 +105,40 @@ $(document).ready(
                     }
                 }
             }
-        };
+        }
 
 
         // "KILL ITEM" FUNCTION
-        var kickItem;
-        kickItem = function ()
+        function kickItem ()
         {
             //get ID of the selected item
             var selectedID = $(this).parent('div').attr('id');
-            for (var i = 0; i < itemsArray.length; i++)
-            {
-                if (itemsArray[i].idn === +selectedID)
+            itemsArray.forEach(function (item, i) {
+                if (item.idn === +selectedID)
                 {
-                    if (itemsArray[i].istate === "p")
+                    if (item.istate === "p")
                     {
                         pend--;
+                        itemsArray.splice(i, 1);                      // delete item
+                        draw();
                     }
-                    if (itemsArray[i].istate === "d")
+                    if (item.istate === "d")
                     {
                         done--;
+                        itemsArray.splice(i, 1);                      // delete item
+                        draw();
                     }
-                    itemsArray.splice(i, 1);                      // delete item
-                    itemID--;
+                    //itemsArray.splice(item, 1);
+                    //itemID--;
                     $(this).parent('div').remove();
-                    draw();
                 }
-            }
+            });
             stats();
-        };
+        }
 
 
         // "CLEAR ALL" FUNCTION
-        var clearAll;
-        clearAll = function () {
+        function clearAll () {
             itemsArray = [];        // clear array of items a.k.a. tasks a.k.a. OBJECTS
 
             pend = 0;               // set startup value
@@ -155,15 +149,15 @@ $(document).ready(
 
             navigation();
             stats();
-        };
+        }
 
 
         // "DRAW" FUNCTION
-        var draw;
-        draw = function () {
+        function draw () {
 
-            $('.item').remove();                    // clear html
-            var counter = 0;                        // counter for drawn items
+            $('.item').remove();                        // clear html
+            var counter = 0;                            // counter for drawn items
+            var foundItemsArray = [];                   // array for found items
 
             // if it is needed to show all items
             if (whatToShow === 0)
@@ -175,7 +169,7 @@ $(document).ready(
                 pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
 
                 // show itemsPerPage items on a page, depending on the selected page
-                for (var i = selectedPage * itemsPerPage - itemsPerPage; i < itemsArray.length; i++)
+                for (var i = (selectedPage * itemsPerPage) - itemsPerPage; i < itemsArray.length; i++)  // [*FOR*]
                 {
                     if (counter < itemsPerPage)
                     {
@@ -212,19 +206,26 @@ $(document).ready(
                 // how many pages?
                 pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
 
+                // GET ALL OF THE "p" STATE ITEMS IN A NEW ARRAY
+                foundItemsArray = [];                       // array for items
+                itemsArray.forEach(function (item)          // loop
+                {
+                    if (item.istate === "p")
+                    {
+                        foundItemsArray.push(item);         // push results into the array
+                    }
+                });
+
                 // show itemsPerPage items on a page, depending on the selected page
-                for (var i = selectedPage * itemsPerPage - itemsPerPage; i < itemsArray.length; i++)
+                for (var i = selectedPage * itemsPerPage - itemsPerPage; i < foundItemsArray.length; i++)    // [*FOR*]
                 {
                     if (counter < itemsPerPage)
                     {
-                        if (itemsArray[i].istate === "p")
-                        {
-                            $('#items_wrap').append("<div class='item' id='" + itemsArray[i].idn
-                                + "'><div class='checkBox' id='checkBox-" + itemsArray[i].idn
-                                + "'></div><div id='content'>" + itemsArray[i].ivalue
-                                + "</div><div class='killItem' id='killItem-" + itemsArray[i].idn + "'></div></div>");
-                            counter++;
-                        }
+                        $('#items_wrap').append("<div class='item' id='" + foundItemsArray[i].idn
+                            + "'><div class='checkBox' id='checkBox-" + foundItemsArray[i].idn
+                            + "'></div><div id='content'>" + foundItemsArray[i].ivalue
+                            + "</div><div class='killItem' id='killItem-" + foundItemsArray[i].idn + "'></div></div>");
+                        counter++;
                     }
                     else
                     {
@@ -242,19 +243,26 @@ $(document).ready(
                 // how many pages?
                 pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
 
+                // GET ALL OF THE "d" STATE ITEMS IN A NEW ARRAY
+                foundItemsArray = [];                       // array for items
+                itemsArray.forEach(function (item)          // loop
+                {
+                    if (item.istate === "d")
+                    {
+                        foundItemsArray.push(item);         // push results into the array
+                    }
+                });
+
                 // show itemsPerPage items on a page, depending on the selected page
-                for (var i = selectedPage * itemsPerPage - itemsPerPage; i < itemsArray.length; i++)
+                for (var i = selectedPage * itemsPerPage - itemsPerPage; i < foundItemsArray.length; i++)   // [*FOR*]
                 {
                     if (counter < itemsPerPage)
                     {
-                        if (itemsArray[i].istate === "d")
-                        {
-                            $('#items_wrap').append("<div class='item done' id='" + itemsArray[i].idn
-                                + "'><div class='checkBox checked' id='checkBox-" + itemsArray[i].idn
-                                + "'></div><div id='content'>" + itemsArray[i].ivalue
-                                + "</div><div class='killItem' id='killItem-" + itemsArray[i].idn + "'></div></div>");
-                            counter++;
-                        }
+                        $('#items_wrap').append("<div class='item done' id='" + foundItemsArray[i].idn
+                            + "'><div class='checkBox checked' id='checkBox-" + foundItemsArray[i].idn
+                            + "'></div><div id='content'>" + foundItemsArray[i].ivalue
+                            + "</div><div class='killItem' id='killItem-" + foundItemsArray[i].idn + "'></div></div>");
+                        counter++;
                     }
                     else
                     {
@@ -263,100 +271,82 @@ $(document).ready(
                 }
             }
             navigation();
-        };
+        }
 
 
         // "SHOW ALL TASKS" FUNCTION (ON "SHOW ALL" CLICK)
-        var showAll;
-        showAll = function () {
+        function showAll () {
 
             selectedPage = 1;                   // selected page by default, when 'Show all' is clicked
             whatToShow = 0;                     // set to show all items
 
-            // add selection mark to page #1
-            $('#nav_block > #1').addClass('selectedN');
-
-            // draw items
             draw();
 
             $('#bottom_showAll').addClass('checked');
             $('#bottom_showPending').removeClass('checked');
             $('#bottom_showDone').removeClass('checked');
-        };
+        }
 
 
         // "SHOW PENDING TASKS" FUNCTION (ON "SHOW PENDING" CLICK)
-        var showPending;
-        showPending = function () {
+        function showPending () {
 
             selectedPage = 1;                   // selected page by default, when 'Show pending' is clicked
             whatToShow = 1;                     // set to show pending items
-
-            // add selection mark to page #1
-            $('#nav_block > #1').addClass('selectedN');
 
             draw();
 
             $('#bottom_showPending').addClass('checked');
             $('#bottom_showAll').removeClass('checked');
             $('#bottom_showDone').removeClass('checked');
-        };
+        }
 
 
         // "SHOW DONE TASKS" FUNCTION (ON "SHOW DONE" CLICK)
-        var showDone;
-        showDone = function () {
+        function showDone () {
 
-            selectedPage = 1;
+            selectedPage = 1;                   // selected page by default, when 'Show completed' is clicked
             whatToShow = 2;                     // set to show pending items
-
-            // add selection mark to page #1
-            $('#nav_block > #1').addClass('selectedN');
 
             draw();
 
             $('#bottom_showDone').addClass('checked');
             $('#bottom_showPending').removeClass('checked');
             $('#bottom_showAll').removeClass('checked');
-        };
+        }
 
 
         // "PAGINATION" FUNCTION (ON PAGE NUMBER CLICK)
-        var pagination;
-        pagination = function ()
+        function pagination ()
         {
             // get ID of the selected page
             selectedPage = $(this).attr('id');
 
             draw();
             stats();
-        };
+        }
 
 
         // "NAVIGATION" FUNCTION (SHOWS NAVIGATION PANEL)
-        var navigation;
-        navigation = function () {
+        function navigation () {
 
-            // re-count items / pages for the case of deletion / status change
-            switch (whatToShow) { //todo use switch case -> done.
+            // re-count items / pages in case of deletion / status change
+            switch (whatToShow) //todo use switch case -> done.
+            {
                 case 0:
-                {
                     itemsNumber = pend + done;
                     pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
                     break;
-                }
                 case 1:
-                {
                     itemsNumber = pend;
                     pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
                     break;
-                }
                 case 2:
-                {
                     itemsNumber = done;
                     pagesNumber = Math.ceil(itemsNumber / itemsPerPage);
                     break;
-                }
+                default:
+                    alert("Something's wrong... I can feel it!")
             }
 
             if (pagesNumber < 1)
@@ -374,7 +364,7 @@ $(document).ready(
             }
             $('#nav_block > div.pageN').removeClass('selectedN');
             $('#nav_block').find('div').eq(selectedPage - 1).addClass('selectedN');
-        };
+        }
 
 
         // SHOW STATS & NAVIGATION PANEL ON STARTUP
@@ -383,8 +373,7 @@ $(document).ready(
 
 
         // "ADD ITEM" FUNCTION
-        var addItem;
-        addItem = function ()
+        function addItem ()
         {
             if ($('#text').val() !== "")
             {
@@ -394,8 +383,8 @@ $(document).ready(
                 var taskItem = {istate: itemState, idn: itemID, ivalue: itemValue}; // item object
 
                 // push item to the array of objects
-                 itemsArray[itemID] = taskItem;
-                //itemsArray.push(taskItem);
+                //itemsArray[itemID] = taskItem;
+                itemsArray.push(taskItem);
 
                 // reset the input field and focus it
                 $('#text').val("").focus();
@@ -408,10 +397,9 @@ $(document).ready(
                 {
                     draw();
                 }
-
                 stats();
             }
-        };
+        }
 
 
         //*****************************************************************************************
