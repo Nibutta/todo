@@ -245,7 +245,7 @@ $(document).ready(
 
                 // GET ALL OF THE "d" STATE ITEMS IN A NEW ARRAY
                 foundItemsArray = [];                       // array for items
-                itemsArray.forEach(function (item)          // loop
+                itemsArray.forEach(function (item)          // parse array
                 {
                     if (item.istate === "d")
                     {
@@ -314,6 +314,7 @@ $(document).ready(
             $('#bottom_showPending').removeClass('checked');
             $('#bottom_showAll').removeClass('checked');
         }
+
 
 
         // "PAGINATION" FUNCTION (ON PAGE NUMBER CLICK)
